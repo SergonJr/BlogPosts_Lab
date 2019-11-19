@@ -1,0 +1,86 @@
+*{
+  box-sizing: border-box;
+}
+
+body
+{
+	margin:0;
+	padding: 0;
+	color: #4F545F;
+	font-size: 13px;
+	font-family: Verdana, sans-serif
+}
+
+h1
+{
+	padding: 20px;
+	margin: 0;
+	color: white;
+	background-color: #55B3C5;
+}
+
+fieldset
+{
+	border: 2px dashed #DDD;
+	margin: 20px;
+	padding: 20px;
+}
+
+legend
+{
+	font-size: 1.3em;
+	font-weight: 900; 
+}
+
+fieldset > div
+{
+	background: uurl('./img/infoicon.png') no-repeat center left #CCE9F8;
+	border: 1px solid #6278B0;
+	color: #42579C;
+	/*background-image: url('./img/infoicon.png');*/
+	background-size: 20% 40%;
+}
+
+#menu{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background-color: #CCC;
+  overflow: hidden;
+}
+
+#menu > li{
+  float: left;
+  padding: 20px;
+}
+
+#menu > li:hover{
+  background-color: #999;
+  color: white;
+  cursor: pointer;
+}
+
+select{
+    font-size: 14px; 
+    width: 250px;  
+}
+
+.buttonHover{
+	font-size: 16px;
+	padding: 10px 20px;
+	text-align : center;
+	color: white;
+	margin-left: 20px;
+	border-radius: 7px;
+}
+
+.buttonHover:hover {
+	cursor: pointer;
+	opacity: 0.8;
+}
+
+#menu > li:hover, .selected{
+  background-color: #999;
+  color: white;
+  cursor: pointer;
+}

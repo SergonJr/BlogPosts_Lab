@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link type="text/css" href="css/style.css" rel="stylesheet"/>
+		<title>
+			Registry Form
+		</title>
+		<meta charset="UTF-8"/>
+	</head>
+	<body>
+		<h1>Registry form</h1>
+
+		<nav>
+			<ul id="menu">
+				<li id="home"> 
+					Home 
+				</li>
+				<li id="about"> 
+					About the site 
+				</li>
+				<li id="registry" class="selected"> 
+					Registry 
+				</li>
+				<li id="contact"> 
+					Contact 
+				</li>
+				<li id="copyright"> 
+					Copyright 
+				</li>
+			</ul>
+		</nav>
+<section id="registrySection" class="currentSelected">
+		<form>
+			<fieldset>
+				<legend>
+					New account registry
+				</legend>
+				<div class="info">
+					Your information is safe with us.
+				</div>
+				<label>Complete Name</label>
+				<br>
+				<input type="text" id="name" class="formElement"/>
+        <span class="errorMessage" id="nameErrorMessage"> </span>
+				<br>
+				<label>Email</label>
+				<br>
+				<input type="email" id="email" class="formElement"/>
+        <span class="errorMessage" id="emailErrorMessage" hidden>Please provide your email</span>
+				<br>
+				<label>Password</label>
+				<br>
+				<input type="password" id="password" class="formElement"/>
+				<br>
+				<label>Password confirmation</label>
+				<br>
+				<input type="password" id="2password" class="formElement"/>
+
+				<p>Country</p>
+				<select id="country">
+          <option value="0"> Select a country... </option>
+					<option value="MX">
+						Mexico
+					</option>
+					<option value="US">
+						USA
+					</option>
+				</select>
+        <span class="errorMessage" id="countryErrorMessage"> </span>
+				<br>
+        <span class="errorMessage" id="genderErrorMessage" ></span>
+        <br>
+				<label>Masculine</label>
+				<input type="radio" name="gender" id="masculine" value="M"/>
+				<br>
+				<label>Femenine</label>
+				<input type="radio" name="gender" id="Femenine" value="F"/>
+				<br>
+				<button type="submit" id="cancelButton" class="formButton">
+					Cancel
+				</button>
+				<button type="submit" id="submitButton" class="formButton">
+					Submit	
+				</button>
+			</fieldset>
+		</form>
+</section>
+    <section id="homeSection" hidden>
+        This is the home
+      </section>
+    <section id="aboutSection" hidden>
+        This is the about
+      </section>
+    <section id="contactSection" hidden>
+        This is the contact
+      </section>
+    <section id="copyrightSection" hidden>
+        This is the copyright
+      </section>
+    <script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous">
+  let submitButton = $("#submitButton");
+  $(submitButton).on("click", function(event) {
+    event.preventDefault();
+    console.log($(this).text());
+
+    let name = $("input[name='name']");
+    let nameError = $("input[name='nameErrorMessage']");
+
+    if (($name).value === "")
+    {
+      ($nameError).text("Please provide your name");
+    }
+    else
+    {
+      ($nameError).text("");
+    }
+  })
+
+  </script>
+	</body>
+
+</html>
