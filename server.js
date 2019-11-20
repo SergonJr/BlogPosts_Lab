@@ -1,10 +1,14 @@
 let express = require('express');
 let morgan = require('morgan');
 let bp = require('body-parser');
+let uuid = require('uuid');
+const path = require('path');
 
 //To use mongoose
 let mongoose = require('mongoose');
-let {BlogList} = require('./model');
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useUnifiedTopology', true);
+let {BlogList} = require('./blog-post-model');
 
 let {DATABASE_URL, PORT} = require('./config');
 
@@ -12,42 +16,11 @@ mongoose.Promise = global.Promise;
 
 let app = express();
 let jsonParser = bp.json();
+app.use(bp.urlencoded({extended: true}));
 
 app.use(express.static('public'));
 app.use(morgan('dev'));
-
-const post = {
-	id: uuid.v4(),
-	title: string,
-	content: string,
-	author: string,
-	publishDate: Date
-};
-
-let blogPosts = [
-	{
-		id: "1",
-		title: "Im tired (Storytime)",
-		content: "Pretty boring content",
-		author: "Sergio Gonzalez",
-		publishDate: new Date(2019, 11, 17, 8, 54, 30, 0);
-	},
-	{
-		id: "2",
-		title: "I want to play Witcher 3, but I forgot I had a lab",
-		content: "This lab is from last week but I forgot to do it lol",
-		author: "Sergio Gonzalez",
-		publishDate: new Date(2019, 11, 17, 8, 55, 30, 0);
-	},
-	{
-		id: "3",
-		title: "I want vacations",
-		content: "I have to play Pokémon Shield, The Outer Worlds and much more...",
-		author: "Sergio Gonzalez",
-		publishDate: new Date(2019, 11, 17, 8, 56, 23, 0);
-	}
-];
-
+app.use(jsonParser);
 
 function getByAuthor(Author)
 {
@@ -79,9 +52,23 @@ function getByID(ID)
 	}
 };
 
+app.use((req, res, next) => {
+	res.header("Access-Control-Allow-Origin", "*");
+  	res.header(
+    	"Access-Control-Allow-Headers",
+    	"Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  	);
+	
+	if (req.method === "OPTIONS") 
+	{
+    	res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+    	return res.status(200).json({});
+ 	}
+  	next();
+});
+
 app.get('/api/blog-posts', (req, res, next) => {
 	console.log("Req query", req.query);
-	return res.status(200).json(blogPosts);
 
 	BlogList.get()
 		.then(blogs => {
@@ -128,10 +115,10 @@ app.get('/api/blog-post', (req, res, next) => {
 		});
 });
 
-app.post('/api/blog-posts', jsonParser, (req, res, next) => {
-	let {id, title, content, author, publishDate} = req.body;
-
-	if (!newBlog.title || !newBlog.content || !newBlog.author || !newBlog.publishDate)
+app.post('/api/blog-posts', (req, res, next) => {
+	newBlog = req.body;
+	console.log(req.body);
+	if (!newBlog.title || !newBlog.content || !newBlog.author)
 	{
 		res.statusMessage = "Missing param(s)";
 		return res.status(406).json({
@@ -139,13 +126,8 @@ app.post('/api/blog-posts', jsonParser, (req, res, next) => {
 		});
 	}
 
-	let newBlog = {
-		id, 
-		title, 
-		content, 
-		author, 
-		publishDate
-	};
+	newBlog.id = uuid.v4();
+	newBlog.publishDate = new Date();
 
 	BlogList.post(newBlog)
 		.then(blog => {
@@ -158,6 +140,7 @@ app.post('/api/blog-posts', jsonParser, (req, res, next) => {
 				status : 500
 			});
 		});
+		
 });
 
 app.delete('/api/blog-posts/:id', (req, res, next) => {
@@ -167,7 +150,7 @@ app.delete('/api/blog-posts/:id', (req, res, next) => {
 	{
 		res.statusMessage = "Blog not found";
 		return res.status(404).json({
-			message: "Blog not found";
+			message: "Blog not found"
 		});
 	}
 
@@ -222,6 +205,7 @@ function runServer(port, databaseUrl){
 			else{
 				server = app.listen(port, () => {
 					console.log( "App is running on port " + port );
+					console.log(path.join(__dirname, 'views/index.html'));
 					resolve();
 				})
 				.on( 'error', err => {
@@ -238,6 +222,7 @@ function closeServer(){
 		.then(() => {
 			return new Promise((resolve, reject) => {
 				console.log('Closing the server');
+				
 				server.close( err => {
 					if (err){
 						return reject(err);
